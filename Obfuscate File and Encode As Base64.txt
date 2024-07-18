@@ -1,0 +1,18 @@
+#Edit the file path to the file you need to obfuscate
+$inputFile = "C:\filepath\file.txt"
+
+#This line will read the file contents
+$content = Get-Content $inputFile -Raw
+
+#This line obfuscates: XOR each character with a key
+$key = 0x42 # You can change this key
+$obfuscated = -join ($content.ToCharArray() | ForEach-Object { [char]([int]$_ -bxor $key) })
+
+#This encodes the obfuscated file in base64
+$encoded = [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($obfuscated))
+
+# Output the result
+$encoded
+
+#push the obfuscated and encoded file to a new file
+$encoded | Out-File "C:\filepath\encoded.txt"
