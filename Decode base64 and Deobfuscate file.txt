@@ -1,0 +1,18 @@
+#Define the path to the input encoded file
+$inputFile = "C:\filepath\output.txt"
+
+#Digests the encoded content
+$encoded = Get-Content $inputFile -Raw
+
+#Decode the Base64 content
+$decoded = [System.Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($encoded))
+
+#Deobfuscation: XOR each character with the same key used for obfuscation
+$key = 0x42 # This should be the same key used in the obfuscation script
+$deobfuscated = -join ($decoded.ToCharArray() | ForEach-Object { [char]([int]$_ -bxor $key) })
+
+#Output the deobfuscated result
+$deobfuscated
+
+#outputs a decoded and deobfuscated file
+$deobfuscated | Out-File "C:\filepath\deobfuscated.txt"
